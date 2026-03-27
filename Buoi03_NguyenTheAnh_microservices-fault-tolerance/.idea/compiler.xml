@@ -2,16 +2,6 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Annotation profile for Demo2" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
-        </processorPath>
-        <module name="Demo2" />
-      </profile>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -24,7 +14,9 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
+        <module name="Demo2" />
         <module name="Service-A-test-spring" />
+        <module name="service-a-spring" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -37,6 +29,7 @@
       <module name="Demo2" options="-parameters" />
       <module name="Service-A-test-spring" options="-parameters" />
       <module name="service-A-spring" options="-parameters" />
+      <module name="service-a-spring" options="-parameters" />
       <module name="service-b-node" options="-parameters" />
     </option>
   </component>

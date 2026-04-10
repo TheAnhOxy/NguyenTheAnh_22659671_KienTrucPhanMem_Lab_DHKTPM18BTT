@@ -14,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -23,19 +26,44 @@ public class UserServiceImpl implements UserService {
     private final JwtUtils jwtUtils;
 
     @Override
-    @Transactional
     public UserResponse register(UserRequest request) {
         if(userRepository.existsByUsername(request.getUsername()))
             throw new RuntimeException("Username đã tồn tại");
 
         User user = modelMapper.map(request, User.class);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole("USER"); // Mặc định là USER
+
+        // SỬA LẠI LOGIC Ở ĐÂY:
+        // Nếu trong request không gửi role (hoặc gửi rỗng/null)
+        if (request.getRole() == null || request.getRole().isEmpty()) {
+            if ("admin".equalsIgnoreCase(user.getUsername())) {
+                user.setRole("ADMIN");
+            } else {
+                user.setRole("USER");
+            }
+        } else {
+            // Nếu có gửi role thì ép kiểu hoa để lưu cho chuẩn (ADMIN/USER)
+            user.setRole(request.getRole().toUpperCase());
+        }
 
         User savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserResponse.class);
     }
+    @Override
+    public List<UserResponse> findAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> modelMapper.map(user, UserResponse.class))
+                .collect(Collectors.toList());
+    }
+    @Override
+    @Transactional // Đảm bảo tính nhất quán khi xóa dữ liệu
+    public void deleteUser(Long id) {
+        // Kiểm tra xem user có tồn tại không trước khi xóa
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại với ID: " + id));
 
+        userRepository.delete(user);
+    }
     @Override
     public TokenResponse login(String loginIdentifier, String password) {
         // Tìm bằng username hoặc phone

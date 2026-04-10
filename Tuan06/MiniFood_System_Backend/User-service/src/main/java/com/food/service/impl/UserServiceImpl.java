@@ -32,9 +32,6 @@ public class UserServiceImpl implements UserService {
 
         User user = modelMapper.map(request, User.class);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        // SỬA LẠI LOGIC Ở ĐÂY:
-        // Nếu trong request không gửi role (hoặc gửi rỗng/null)
         if (request.getRole() == null || request.getRole().isEmpty()) {
             if ("admin".equalsIgnoreCase(user.getUsername())) {
                 user.setRole("ADMIN");
@@ -42,7 +39,6 @@ public class UserServiceImpl implements UserService {
                 user.setRole("USER");
             }
         } else {
-            // Nếu có gửi role thì ép kiểu hoa để lưu cho chuẩn (ADMIN/USER)
             user.setRole(request.getRole().toUpperCase());
         }
 
@@ -56,9 +52,8 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
     @Override
-    @Transactional // Đảm bảo tính nhất quán khi xóa dữ liệu
+    @Transactional
     public void deleteUser(Long id) {
-        // Kiểm tra xem user có tồn tại không trước khi xóa
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại với ID: " + id));
 
@@ -66,15 +61,12 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public TokenResponse login(String loginIdentifier, String password) {
-        // Tìm bằng username hoặc phone
         User user = userRepository.findByUsernameOrPhone(loginIdentifier)
                 .orElseThrow(() -> new RuntimeException("Tài khoản không tồn tại"));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Mật khẩu không chính xác");
         }
-
-        // Tạo cặp AccessToken và RefreshToken
         String accessToken = jwtUtils.generateToken(user.getUsername(), user.getRole());
         String refreshToken = jwtUtils.generateRefreshToken(user.getUsername());
 

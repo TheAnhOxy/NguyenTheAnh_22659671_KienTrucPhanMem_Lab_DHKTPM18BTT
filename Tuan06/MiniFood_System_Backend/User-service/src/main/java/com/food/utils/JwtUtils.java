@@ -12,7 +12,6 @@ import java.util.Date;
 
 @Component
 public class JwtUtils {
-    // Secret key phải đủ dài (trên 32 ký tự) để chạy chuẩn thuật toán HS256
     private final String SECRET_KEY = "YourSuperSecretKeyForJWTThatIsVeryLongAndSecureYourSuperSecretKey";
 
     private final long ACCESS_TOKEN_EXPIRATION = 3600000; // 1 giờ
@@ -21,8 +20,6 @@ public class JwtUtils {
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
-
-    // 1. Tạo Access Token (Có Role để phân quyền nhanh)
     public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
@@ -33,7 +30,6 @@ public class JwtUtils {
                 .compact();
     }
 
-    // 2. Tạo Refresh Token (Chỉ chứa username để bảo mật)
     public String generateRefreshToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -43,7 +39,6 @@ public class JwtUtils {
                 .compact();
     }
 
-    // 3. Validate Token chung
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
@@ -56,13 +51,10 @@ public class JwtUtils {
         return false;
     }
 
-    // 4. Lấy Username từ Token
     public String getUsernameFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
                 .parseClaimsJws(token).getBody().getSubject();
     }
-
-    // 5. Lấy Role từ Token
     public String getRoleFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
                 .parseClaimsJws(token).getBody().get("role", String.class);

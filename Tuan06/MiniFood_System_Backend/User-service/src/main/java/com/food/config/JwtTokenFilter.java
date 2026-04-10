@@ -35,8 +35,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if (jwtUtils.validateToken(token)) {
             String username = jwtUtils.getUsernameFromToken(token);
             String role = jwtUtils.getRoleFromToken(token);
-
-            // Chuyển Role thành SimpleGrantedAuthority để Spring Security hiểu
             List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
 
             UsernamePasswordAuthenticationToken authentication =

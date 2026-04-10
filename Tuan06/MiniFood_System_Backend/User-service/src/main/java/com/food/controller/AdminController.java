@@ -18,7 +18,7 @@ public class AdminController {
                 ApiResponse.builder()
                         .status(200)
                         .message("Lấy danh sách người dùng thành công")
-                        .data(userService.findAllUsers()) // Cần thêm hàm này trong Service
+                        .data(userService.findAllUsers())
                         .build()
         );
     }

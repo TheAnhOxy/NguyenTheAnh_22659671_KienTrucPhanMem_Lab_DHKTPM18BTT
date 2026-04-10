@@ -24,13 +24,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // 1. Công khai: Đăng ký, Đăng nhập
                         .requestMatchers("/auth/**").permitAll()
-
-                        // 2. Chỉ ADMIN: Quản lý người dùng, Dashboard
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        // 3. USER & ADMIN: Xem thông tin cá nhân, đặt hàng
                         .requestMatchers("/profile/**").hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated()

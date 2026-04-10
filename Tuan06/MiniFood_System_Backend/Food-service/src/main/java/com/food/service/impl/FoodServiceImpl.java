@@ -37,11 +37,8 @@ public class FoodServiceImpl implements FoodService {
     @Override
     @Transactional
     public FoodResponse updateFood(Long id, FoodRequest request) {
-        // Tìm món ăn cũ, nếu không thấy thì báo lỗi
         Food food = foodRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Món ăn không tồn tại với ID: " + id));
-
-        // Cập nhật thông tin từ request vào entity
         food.setName(request.getName());
         food.setPrice(request.getPrice());
         food.setDescription(request.getDescription());

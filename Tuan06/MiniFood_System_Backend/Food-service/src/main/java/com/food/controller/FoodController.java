@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/foods") // Lưu ý: Gateway đã cắt /food nên ở đây chỉ cần /foods
+@RequestMapping("/foods")
 @RequiredArgsConstructor
 public class FoodController {
     private final FoodService foodService;

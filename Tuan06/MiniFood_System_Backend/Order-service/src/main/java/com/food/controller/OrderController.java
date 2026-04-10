@@ -3,6 +3,8 @@ package com.food.controller;
 
 import com.food.dto.request.OrderRequest;
 import com.food.dto.response.ApiResponse;
+import com.food.entity.Order;
+import com.food.repository.OrderRepository;
 import com.food.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+
+    private final OrderRepository orderRepository;
 
     @PostMapping
     public ResponseEntity<ApiResponse> placeOrder(@RequestBody OrderRequest request) {
@@ -30,5 +34,12 @@ public class OrderController {
                 .status(200)
                 .data(orderService.getAllOrders())
                 .build());
+    }
+
+    @PutMapping("/{id}/status")
+    public void updateStatus(@PathVariable Long id, @RequestParam String status) {
+        Order order = orderRepository.findById(id).orElseThrow();
+        order.setStatus(status);
+        orderRepository.save(order);
     }
 }

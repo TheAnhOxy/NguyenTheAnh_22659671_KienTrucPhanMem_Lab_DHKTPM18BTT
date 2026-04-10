@@ -12,7 +12,6 @@ public class NotificationController {
     public ResponseEntity<Void> sendNotification(@RequestBody Map<String, String> payload) {
         String message = payload.get("message");
 
-        // In ra màn hình để chứng minh Microservices đã thông luồng
         System.out.println("==============================================");
         System.out.println("[THÔNG BÁO MỚI]: " + message);
         System.out.println("==============================================");

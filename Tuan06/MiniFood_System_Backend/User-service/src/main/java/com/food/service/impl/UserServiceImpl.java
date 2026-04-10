@@ -92,6 +92,6 @@ public class UserServiceImpl implements UserService {
                     .role(user.getRole())
                     .build();
         }
-        throw new RuntimeException("Refresh Token không hợp lệ");
+        throw new RuntimeException("Refresh Token không hợp lệ, vui lòng thử lại");
     }
 }

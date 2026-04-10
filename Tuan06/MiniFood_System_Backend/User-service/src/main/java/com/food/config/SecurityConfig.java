@@ -27,6 +27,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/profile/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/notifications/logs").permitAll()
 
                         .anyRequest().authenticated()
                 );

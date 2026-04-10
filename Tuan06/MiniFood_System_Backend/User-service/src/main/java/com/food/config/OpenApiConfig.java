@@ -21,7 +21,7 @@ import java.util.List;
 public class OpenApiConfig {
 
     @Bean
-    public GroupedOpenApi publicApi(@Value("${openapi.service.api-docs}") String apiDocs) {
+    public GroupedOpenApi publicApi(@Value("${openapi.service.server:http://localhost:8081}") String apiDocs) {
         return GroupedOpenApi.builder()
                 .group(apiDocs) // /v3/api-docs/backend-service
                 .packagesToScan("com.food.controller")

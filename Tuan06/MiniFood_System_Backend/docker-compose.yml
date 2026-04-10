@@ -83,21 +83,38 @@ services:
       db-order:
         condition: service_healthy
 
-  payment-notification-service:
-    build: ./payment-notification-service
-    container_name: payment-notification-service
+  # --- Payment Service ---
+  payment-service:
+    build: ./payment-service
+    container_name: payment-service
     ports: ["8084:8084"]
     environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-order:5432/order_db # Có thể dùng chung DB với Order để tiết kiệm tài nguyên
       ORDER_SERVICE_URL: http://order-service:8083/api/orders
+      NOTIFICATION_SERVICE_URL: http://notification-service:8085/api/notifications
     depends_on:
-      - order-service
+      - db-order
 
+  # --- Notification Service ---
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    ports: ["8085:8085"]
+    # Service này có thể không cần DB nếu chỉ System.out.println()
+    depends_on:
+      - payment-service
+
+  # --- API Gateway (Cập nhật route) ---
   api-gateway:
     build: ./api-gateway
     container_name: api-gateway
     ports: ["8080:8080"]
+    environment:
+      PAYMENT_SERVICE_URL: http://payment-service:8084
+      NOTIFICATION_SERVICE_URL: http://notification-service:8085
     depends_on:
       - user-service
       - food-service
       - order-service
-      - payment-notification-service
+      - payment-service
+      - notification-service

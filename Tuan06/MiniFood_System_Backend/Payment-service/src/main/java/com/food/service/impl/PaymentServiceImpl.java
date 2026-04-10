@@ -23,18 +23,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Transactional
     public PaymentResponse processPayment(PaymentRequest request) {
-        // 1. Giả lập thanh toán thành công
         Payment payment = new Payment();
         payment.setOrderId(request.getOrderId());
         payment.setAmount(request.getAmount());
         payment.setPaymentMethod(request.getPaymentMethod());
         payment.setStatus("SUCCESS");
         paymentRepository.save(payment);
-
-        // 2. Cập nhật Order Service
         orderClient.updateStatus(request.getOrderId(), "PAID");
-
-        // 3. Gọi Notification Service
         Map<String, String> notifyMsg = Map.of(
                 "message", "Đơn hàng #" + request.getOrderId() + " đã thanh toán thành công qua " + request.getPaymentMethod()
         );

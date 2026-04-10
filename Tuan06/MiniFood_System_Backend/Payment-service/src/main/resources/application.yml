@@ -7,6 +7,15 @@ spring:
   profiles:
     active: dev
 
+  datasource:
+    url: jdbc:postgresql://localhost:5435/order_db?options=-c%20timezone=UTC
+    username: root
+    password: Theanh123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 management:
   endpoints:

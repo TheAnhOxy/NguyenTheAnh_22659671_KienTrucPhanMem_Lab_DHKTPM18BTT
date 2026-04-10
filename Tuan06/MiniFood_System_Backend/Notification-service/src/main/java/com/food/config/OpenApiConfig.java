@@ -1,4 +1,4 @@
-package com.food.notificationservice.config;
+package com.food.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

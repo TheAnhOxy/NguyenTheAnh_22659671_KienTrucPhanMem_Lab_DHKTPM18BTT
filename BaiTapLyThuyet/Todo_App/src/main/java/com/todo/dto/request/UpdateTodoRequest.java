@@ -7,5 +7,5 @@ public class UpdateTodoRequest {
     private String title;
     private boolean completed;
 
-  
+
 }

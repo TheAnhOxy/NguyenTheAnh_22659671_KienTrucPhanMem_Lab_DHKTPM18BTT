@@ -5,9 +5,9 @@ const FoodList = () => {
   const [foods, setFoods] = useState([]);
 
   useEffect(() => {
-    api.get("/foods").then((res) => setFoods(res.data.data));
+    // Thêm /food vào trước để axios.js nhận diện đúng service
+    api.get("/food/foods").then((res) => setFoods(res.data.data));
   }, []);
-
   return (
     <div className="p-10 grid grid-cols-1 md:grid-cols-3 gap-6">
       {foods.map((food) => (
@@ -31,3 +31,5 @@ const FoodList = () => {
     </div>
   );
 };
+
+export default FoodList;

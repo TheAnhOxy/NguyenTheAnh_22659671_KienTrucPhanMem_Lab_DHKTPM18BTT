@@ -13,9 +13,9 @@ spring:
 
 openapi:
   service:
-    api-docs: notification-service
+    api-docs: account-service
     server: http://localhost:${server.port}
-    title: notification service
+    title: account service
     version: 1.0.0
 #  jpa:
 #    database-platform: org.hibernate.dialect.H2Dialect

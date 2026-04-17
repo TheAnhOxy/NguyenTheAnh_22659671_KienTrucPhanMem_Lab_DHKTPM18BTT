@@ -8,6 +8,7 @@ import AdminLogs from "./pages/AdminLogs";
 import Navbar from "./components/Navbar";
 import AdminFoods from "./pages/AdminFoods";
 import Register from "./pages/Register";
+import FoodList from "./pages/FoodList";
 
 function App() {
   const role = localStorage.getItem("role");
@@ -18,6 +19,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/foods" element={<FoodList />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/admin/logs" element={<AdminLogs />} />

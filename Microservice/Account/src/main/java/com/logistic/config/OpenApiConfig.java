@@ -1,4 +1,4 @@
-package com.javaweb.config;
+package com.logistic.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

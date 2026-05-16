@@ -1,0 +1,116 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  devtools:
+    add-properties: true
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+      routes: # điều hướng request đến service tương ứng thông qua chỉ định trên url
+        - id:   user-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/user/**, /v3/api-docs/user-service
+          filters:
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
+            - CustomizeFilter
+        - id: food-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/food/**, /v3/api-docs/food-service
+          filters:
+            - RewritePath=/food/(?<segment>.*), /$\{segment} # thay thế ký tự /account/ thành /
+            - CustomizeFilter
+
+        - id: order-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/order/**, /v3/api-docs/order-service
+          filters:
+            - RewritePath=/order/(?<segment>.*), /$\{segment} # thay thế ký tự /mail/ thành /
+            - CustomizeFilter
+        - id: payment-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/payment/**, /v3/api-docs/payment-service
+          filters:
+            - RewritePath=/payment/(?<segment>.*), /$\{segment} # thay thế ký tự /product/ thành /
+            - CustomizeFilter
+        - id: notification-service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/notification/**, /v3/api-docs/notification-service
+          filters:
+            - RewritePath=/notification/(?<segment>.*), /$\{segment} # thay thế ký tự /order/ thành /
+#        - id: inventory-service
+#          uri: http://localhost:8086
+#          predicates:
+#            - Path=/inventory/**, /v3/api-docs/inventory-service
+#          filters:
+#            - RewritePath=/inventory/(?<segment>.*), /$\{segment} # thay thế ký tự /inventory/ thành /
+#        - id: mail-service
+#          uri: http://localhost:8087
+#          predicates:
+#            - Path=/mail/**, /v3/api-docs/mail-service
+#          filters:
+#            - RewritePath=/mail/(?<segment>.*), /$\{segment} # thay thế ký tự /mail/ thành /
+#            - CustomizeFilter
+#        - id: notification-service
+#          uri: http://localhost:8085
+#          predicates:
+#            - Path=/notification/**, /v3/api-docs/notification-service
+#          filters:
+#            - RewritePath=/notification/(?<segment>.*), /$\{segment} # thay thế ký tự /mail/ thành /
+#            - CustomizeFilter
+
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /v3/api-docs
+        name: API Gateway
+      - url: /v3/api-docs/user-service
+        name: User Service
+      - url: /v3/api-docs/food-service
+        name: Food Service
+      - url: /v3/api-docs/payment-service
+        name: Payment Service
+      - url: /v3/api-docs/order-service
+        name: Order Service
+      - url: /v3/api-docs/notification-service
+        name: Notification Service
+#      - url: /v3/api-docs/inventory-service
+#        name: Inventory Service
+#      - url: /v3/api-docs/mail-service
+#        name: Mail Service
+#      - url: /v3/api-docs/notification-service
+#        name: Notification Service
+
+#redis:
+#  host: localhost
+#  port: 6379
+
+#grpc:
+#  client:
+#    verify-token-service:
+#      address: static://localhost:9091
+#      enableKeepAlive: true
+#      keepAliveWithoutCalls: true
+#      negotiationType: plaintext
